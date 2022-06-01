@@ -21,7 +21,7 @@ tasks.register<org.flywaydb.gradle.task.FlywayMigrateTask>("migrate") {
     url = "jdbc:postgresql://localhost:5432/messages?user=messages&amp;password=messages"
 }
 
-tasks.register<org.flywaydb.gradle.task.FlywayCleanTask>("clean") {
+tasks.register<org.flywaydb.gradle.task.FlywayCleanTask>("dbClean") {
     url = "jdbc:postgresql://localhost:5432/messages?user=messages&amp;password=messages"
 }
 

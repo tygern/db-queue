@@ -16,13 +16,11 @@ fun main() = runBlocking {
     val dbConfig = DatabaseConfiguration(databaseUrl)
     val gateway = MessageDataGateway(dbConfig.db)
 
+    logger.info("Starting $numberOfWorkers workers")
+
     repeat(numberOfWorkers) { workerId ->
         launch {
-            while (true) {
-                gateway.withMessage { message ->
-                    logger.info("Worker $workerId processed ${message.body}")
-                }
-            }
+            Worker(id = workerId, gateway = gateway).listen()
         }
     }
 }
