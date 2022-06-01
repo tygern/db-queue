@@ -59,4 +59,13 @@ class MessageConsumerTest {
         val result = consumer.withMessage { it }
         assertNull(result)
     }
+
+    @Test
+    fun testWithMessage_exception() = runTest {
+        val badResult: Any? = consumer.withMessage<Any?> { throw RuntimeException("bad news") }
+        assertNull(badResult)
+
+        val result = consumer.withMessage { "I've read ${it.body}" }
+        assertEquals("I've read hello there", result)
+    }
 }
