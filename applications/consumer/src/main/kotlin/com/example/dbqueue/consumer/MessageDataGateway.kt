@@ -5,10 +5,10 @@ import com.example.dbqueue.databasesupport.NotFound
 import com.example.dbqueue.databasesupport.QueryResult
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.LongColumnType
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 class MessageDataGateway(private val db: Database) {
-    fun <T> withMessage(block: (Message) -> T): T? = transaction(db) {
+    suspend fun <T> withMessage(block: suspend (Message) -> T): T? = newSuspendedTransaction(db = db) {
         val queryResult: QueryResult<Message>? =
             exec("select id, body, created_at from messages where sent_at is null for update skip locked") { rs ->
                 if (rs.next()) {

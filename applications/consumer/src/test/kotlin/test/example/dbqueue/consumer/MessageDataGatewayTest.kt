@@ -1,6 +1,7 @@
 package test.example.dbqueue.consumer
 
 import com.example.dbqueue.consumer.MessageDataGateway
+import kotlinx.coroutines.test.runTest
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 import kotlin.test.*
@@ -24,14 +25,14 @@ class MessageDataGatewayTest {
     }
 
     @Test
-    fun testWithMessage() {
+    fun testWithMessage() = runTest {
         val result = gateway.withMessage { "I've read ${it.body}" }
 
         assertEquals("I've read hello there", result)
     }
 
     @Test
-    fun testWithMessageSetsSentAt() {
+    fun testWithMessageSetsSentAt() = runTest {
         gateway.withMessage { }
 
         val sentAt = transaction(db) {
@@ -48,7 +49,7 @@ class MessageDataGatewayTest {
     }
 
     @Test
-    fun testWithMessage_skipsSent() {
+    fun testWithMessage_skipsSent() = runTest {
         gateway.withMessage { }
         val result = gateway.withMessage { it }
 
