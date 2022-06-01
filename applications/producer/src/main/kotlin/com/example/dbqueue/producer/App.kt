@@ -8,16 +8,18 @@ class App
 private val logger = LoggerFactory.getLogger(App::class.java)
 
 fun main() {
-    val databaseUrl = System.getenv("DATABASE_URL")
-        ?: throw RuntimeException("Please set the DATABASE_URL environment variable")
+    val databaseUrl = System.getenv("DATABASE_URL") ?: throw RuntimeException("Please set DATABASE_URL")
+    val numberOfMessages = System.getenv("NUMBER_OF_MESSAGES")?.toInt() ?: 1000
+
+    logger.info("Now generating  $numberOfMessages messages")
 
     val dbConfig = DatabaseConfiguration(databaseUrl)
     val gateway = MessageDataGateway(dbConfig.db)
 
-    logger.info("Generating messages")
-
-    repeat(1000) {
+    repeat(numberOfMessages) {
         val message = generateMessage()
         gateway.save(message)
     }
+
+    logger.info("Done generating $numberOfMessages messages")
 }
