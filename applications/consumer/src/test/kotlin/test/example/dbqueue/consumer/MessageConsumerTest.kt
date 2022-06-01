@@ -1,6 +1,6 @@
 package test.example.dbqueue.consumer
 
-import com.example.dbqueue.consumer.MessageDataGateway
+import com.example.dbqueue.consumer.MessageConsumer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
@@ -10,14 +10,14 @@ import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 
 @Suppress("SqlWithoutWhere")
-class MessageDataGatewayTest {
+class MessageConsumerTest {
     private val db by lazy {
         Database.connect(
             url = "jdbc:postgresql://localhost:5432/messages_test?user=messages&amp;password=messages"
         )
     }
 
-    private val gateway = MessageDataGateway(db)
+    private val consumer = MessageConsumer(db)
 
     @BeforeTest
     fun setUp() {
@@ -29,14 +29,14 @@ class MessageDataGatewayTest {
 
     @Test
     fun testWithMessage() = runTest {
-        val result = gateway.withMessage { "I've read ${it.body}" }
+        val result = consumer.withMessage { "I've read ${it.body}" }
 
         assertEquals("I've read hello there", result)
     }
 
     @Test
     fun testWithMessageSetsSentAt() = runTest {
-        gateway.withMessage { }
+        consumer.withMessage { }
 
         val sentAt = transaction(db) {
             exec("select id, body, created_at, sent_at from messages") { rs ->
@@ -53,10 +53,10 @@ class MessageDataGatewayTest {
 
     @Test
     fun testWithMessage_skipsLocked() = runTest {
-        launch { gateway.withMessage { delay(2.seconds) } }
+        launch { consumer.withMessage { delay(2.seconds) } }
         delay(1.seconds)
 
-        val result = gateway.withMessage { it }
+        val result = consumer.withMessage { it }
         assertNull(result)
     }
 }

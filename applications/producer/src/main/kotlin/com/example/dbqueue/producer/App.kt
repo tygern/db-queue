@@ -14,11 +14,10 @@ fun main() {
     logger.info("Now generating  $numberOfMessages messages")
 
     val dbConfig = DatabaseConfiguration(databaseUrl)
-    val gateway = MessageDataGateway(dbConfig.db)
+    val publisher = MessagePublisher(dbConfig.db)
 
     repeat(numberOfMessages) {
-        val message = generateMessage()
-        gateway.save(message)
+        publisher.send(generateMessage())
     }
 
     logger.info("Done generating $numberOfMessages messages")

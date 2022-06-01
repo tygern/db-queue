@@ -1,20 +1,20 @@
 package test.example.dbqueue.producer
 
-import com.example.dbqueue.producer.MessageDataGateway
+import com.example.dbqueue.producer.MessagePublisher
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Instant
 import kotlin.test.*
 
 @Suppress("SqlWithoutWhere")
-class MessageDataGatewayTest {
+class MessagePublisherTest {
     private val db by lazy {
         Database.connect(
             url = "jdbc:postgresql://localhost:5432/messages_test?user=messages&amp;password=messages"
         )
     }
 
-    private val gateway = MessageDataGateway(db)
+    private val publisher = MessagePublisher(db)
 
     @BeforeTest
     fun setUp() {
@@ -24,8 +24,8 @@ class MessageDataGatewayTest {
     }
 
     @Test
-    fun testSave() {
-        gateway.save("hello there")
+    fun testSend() {
+        publisher.send("hello there")
 
         val result = transaction(db) {
             exec("select id, body, created_at, sent_at from messages") { rs ->

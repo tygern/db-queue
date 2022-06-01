@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.LongColumnType
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
-class MessageDataGateway(private val db: Database) {
+class MessageConsumer(private val db: Database) {
     suspend fun <T> withMessage(block: suspend (Message) -> T): T? = newSuspendedTransaction(db = db) {
         val queryResult: QueryResult<Message>? =
             exec("select id, body, created_at from messages where sent_at is null for update skip locked") { rs ->

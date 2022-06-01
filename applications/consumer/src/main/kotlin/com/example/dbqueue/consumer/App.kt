@@ -14,13 +14,13 @@ fun main() = runBlocking {
     val numberOfWorkers = System.getenv("NUMBER_OF_WORKERS")?.toInt() ?: 4
 
     val dbConfig = DatabaseConfiguration(databaseUrl)
-    val gateway = MessageDataGateway(dbConfig.db)
+    val consumer = MessageConsumer(dbConfig.db)
 
     logger.info("Starting $numberOfWorkers workers")
 
     repeat(numberOfWorkers) { workerId ->
         launch {
-            Worker(id = workerId, gateway = gateway).listen()
+            Worker(id = workerId, consumer = consumer).listen()
         }
     }
 }
