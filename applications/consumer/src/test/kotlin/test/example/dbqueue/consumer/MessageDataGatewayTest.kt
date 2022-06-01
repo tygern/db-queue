@@ -1,10 +1,13 @@
 package test.example.dbqueue.consumer
 
 import com.example.dbqueue.consumer.MessageDataGateway
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 import kotlin.test.*
+import kotlin.time.Duration.Companion.seconds
 
 @Suppress("SqlWithoutWhere")
 class MessageDataGatewayTest {
@@ -49,10 +52,11 @@ class MessageDataGatewayTest {
     }
 
     @Test
-    fun testWithMessage_skipsSent() = runTest {
-        gateway.withMessage { }
-        val result = gateway.withMessage { it }
+    fun testWithMessage_skipsLocked() = runTest {
+        launch { gateway.withMessage { delay(2.seconds) } }
+        delay(1.seconds)
 
+        val result = gateway.withMessage { it }
         assertNull(result)
     }
 }
