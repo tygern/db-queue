@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  postgres-api:
+    image: postgres:14.3
+    container_name: messages-database
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: 'messages'
+      POSTGRES_USER: '${POSTGRES_USER:-messages}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:-messages}'
+      ADDITIONAL_POSTGRES_DB: 'messages_test'
+    volumes:
+      - ./databases/init-scripts:/docker-entrypoint-initdb.d
+      - ./.pg-data:/var/lib/postgresql/data

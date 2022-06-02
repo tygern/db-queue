@@ -18,17 +18,17 @@ flyway {
 }
 
 tasks.register<org.flywaydb.gradle.task.FlywayMigrateTask>("migrate") {
-    url = "jdbc:postgresql://localhost:5432/messages?user=messages&amp;password=messages"
+    url = "jdbc:postgresql://localhost:5432/messages?user=messages&password=messages"
 }
 
 tasks.register<org.flywaydb.gradle.task.FlywayCleanTask>("dbClean") {
-    url = "jdbc:postgresql://localhost:5432/messages?user=messages&amp;password=messages"
+    url = "jdbc:postgresql://localhost:5432/messages?user=messages&password=messages"
 }
 
 tasks.register<org.flywaydb.gradle.task.FlywayMigrateTask>("testMigrate") {
-    url = "jdbc:postgresql://localhost:5432/messages_test?user=messages&amp;password=messages"
+    url = "jdbc:postgresql://localhost:5432/messages_test?user=messages&password=messages"
 }
 
 tasks.register<org.flywaydb.gradle.task.FlywayCleanTask>("testClean") {
-    url = "jdbc:postgresql://localhost:5432/messages_test?user=messages&amp;password=messages"
+    url = "jdbc:postgresql://localhost:5432/messages_test?user=messages&password=messages"
 }

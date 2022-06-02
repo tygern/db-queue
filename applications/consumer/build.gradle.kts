@@ -20,7 +20,7 @@ dependencies {
 
 task<JavaExec>("run") {
     classpath = files(tasks.jar)
-    environment("DATABASE_URL", "jdbc:postgresql://localhost:5432/messages?user=messages&amp;password=messages")
+    environment("DATABASE_URL", "jdbc:postgresql://localhost:5432/messages?user=messages&password=messages")
 }
 
 tasks {

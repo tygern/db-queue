@@ -4,7 +4,7 @@
 
 1.  Set up database
     ```shell
-    psql < databases/create_databases.sql
+    docker-compose up
     ./gradlew migrate testMigrate
     ```
 
