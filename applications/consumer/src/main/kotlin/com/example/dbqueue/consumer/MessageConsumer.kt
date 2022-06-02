@@ -7,6 +7,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.LongColumnType
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.sql.transactions.transaction
 
 class MessageConsumer(private val db: Database) {
     suspend fun <T> withMessage(block: suspend (Message) -> T): T? = newSuspendedTransaction(db = db) {
@@ -26,6 +27,13 @@ class MessageConsumer(private val db: Database) {
                     )
                 }
             }
+        }
+    }
+
+    fun countUnsent(): Int? = transaction(db) {
+        exec("select count(id) from messages where sent_at is null") { rs ->
+            rs.next()
+            rs.getInt("count")
         }
     }
 

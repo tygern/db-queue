@@ -13,7 +13,7 @@ class Worker(
     suspend fun listen() {
         while (true) {
             consumer.withMessage { message ->
-                logger.info("Worker $id processed ${message.body}")
+                logger.debug("Worker $id processed ${message.body}")
             }
         }
     }

@@ -5,7 +5,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.example.dbqueue" level="DEBUG"/>
+    <logger name="com.example.dbqueue" level="${LOG_LEVEL:-INFO}"/>
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>

@@ -68,4 +68,19 @@ class MessageConsumerTest {
         val result = consumer.withMessage { "I've read ${it.body}" }
         assertEquals("I've read hello there", result)
     }
+
+    @Test
+    fun testCount() {
+        transaction(db) {
+            exec("insert into messages (body) values ('hello there')")
+            exec("insert into messages (body) values ('hello there')")
+            exec("insert into messages (body) values ('hello there')")
+            exec("insert into messages (body, sent_at) values ('hello there', current_timestamp)")
+            exec("insert into messages (body, sent_at) values ('hello there', current_timestamp)")
+        }
+
+        val count = consumer.countUnsent()
+
+        assertEquals(4, count)
+    }
 }
